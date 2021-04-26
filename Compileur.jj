@@ -17,7 +17,7 @@ public class Compileur
       {
         Compileur parseur = new Compileur(System.in);
         //mainNoTerminaux
-        int i = parseur.mainNT();
+        float i = parseur.mainNT();
         System.out.println(i);
         System.out.println("C'est bien une expression arithmetique");
       }
@@ -38,7 +38,7 @@ public class Compileur
         InputStreamReader ipsr = new InputStreamReader(ips);
         BufferedReader br = new BufferedReader(ipsr);
         Compileur parseur = new Compileur(br);
-        int i = parseur.mainNT();
+        float i = parseur.mainNT();
         System.out.println(i);
         System.out.println("C'est bien une expression arithmetique");
       }
@@ -69,9 +69,9 @@ TOKEN :
 | < EOL : ";" >
 }
 
-int mainNT() :
+float mainNT() :
 {
-  int e;
+  float e;
 }
 {
   (
@@ -88,10 +88,10 @@ int mainNT() :
 }
 */
 
-int expression() :
+float expression() :
 {
-  int res;
-  int e;
+  float res;
+  float e;
 }
 {
   e = terme()
@@ -113,10 +113,10 @@ int expression() :
   }
 }
 
-int terme() :
+float terme() :
 {
-  int res;
-  int e;
+  float res;
+  float e;
 }
 {
   e = facteur()
@@ -138,9 +138,9 @@ int terme() :
   }
 }
 
-int facteur() :
+float facteur() :
 {
-  int e;
+  float e;
   Token t;
 }
 {
@@ -161,7 +161,8 @@ int facteur() :
   }
 | t = < NOMBRE >
   {
-    return Integer.parseInt(t.image);
+   // return Integer.parseInt(t.image);
+   return Float.parseFloat(t.image);
   }
 }
 
