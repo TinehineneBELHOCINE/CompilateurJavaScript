@@ -5,12 +5,16 @@
 
 PARSER_BEGIN(Compileur)
 import java.io.InputStream;
+import java.io.*;
+
 public class Compileur {
 
 
   
 
-public static void main(String args[]) {
+public static void main(String args[])  throws FileNotFoundException, ParseException{
+
+if(args.length==0){
 try {
 Compileur parseur = new Compileur(System.in);
 //mainNoTerminaux
@@ -21,7 +25,20 @@ System.out.println("Ceci n'est pas une expression arithmetique");
 } catch (ParseException e) {
 System.out.println("Ceci n'est pas une expression arithmetique");
 }
-
+}else{
+   try {
+   InputStream ips=new FileInputStream(args[0]); 
+   InputStreamReader ipsr=new InputStreamReader(ips);
+   BufferedReader br=new BufferedReader(ipsr);
+Compileur parseur = new Compileur(br);
+parseur.mainNT();
+System.out.println("C'est bien une expression arithmetique");
+} catch (TokenMgrError e) {
+System.out.println("Ceci n'est pas une expression arithmetique");
+} catch (ParseException e) {
+System.out.println("Ceci n'est pas une expression arithmetique");
+}
+}
 }
 
 }
