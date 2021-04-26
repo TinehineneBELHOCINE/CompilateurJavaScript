@@ -11,14 +11,15 @@ public class Compileur
 {
   public static void main(String args []) throws FileNotFoundException, ParseException
   {
+    AST.AST ast;
     if (args.length == 0)
     {
       try
       {
         Compileur parseur = new Compileur(System.in);
         //mainNoTerminaux
-        float i = parseur.mainNT();
-        System.out.println(i);
+        ast = parseur.mainNT();
+        System.out.println(ast.toString());
         System.out.println("C'est bien une expression arithmetique");
       }
       catch (TokenMgrError e)
@@ -38,8 +39,8 @@ public class Compileur
         InputStreamReader ipsr = new InputStreamReader(ips);
         BufferedReader br = new BufferedReader(ipsr);
         Compileur parseur = new Compileur(br);
-        float i = parseur.mainNT();
-        System.out.println(i);
+        ast = parseur.mainNT();
+        System.out.println(ast.toString());
         System.out.println("C'est bien une expression arithmetique");
       }
       catch (TokenMgrError e)
@@ -69,9 +70,9 @@ TOKEN :
 | < EOL : ";" >
 }
 
-float mainNT() :
+AST.ExpressionA mainNT() :
 {
-  float e;
+  AST.ExpressionA e;
 }
 {
   (
@@ -88,10 +89,10 @@ float mainNT() :
 }
 */
 
-float expression() :
+AST.ExpressionA expression() :
 {
-  float res;
-  float e;
+  AST.ExpressionA res;
+  AST.ExpressionA e;
 }
 {
   e = terme()
@@ -101,11 +102,11 @@ float expression() :
   (
     "+" e = terme()
     {
-      res = res + e;
+      res = new AST.Plus(res, e);
     }
   | "-" e = terme()
     {
-      res = res - e;
+      res = new AST.Moins(res, e);
     }
   )*
   {
@@ -113,10 +114,10 @@ float expression() :
   }
 }
 
-float terme() :
+AST.ExpressionA terme() :
 {
-  float res;
-  float e;
+  AST.ExpressionA res;
+  AST.ExpressionA e;
 }
 {
   e = facteur()
@@ -126,11 +127,11 @@ float terme() :
   (
     "*" e = facteur()
     {
-      res = res * e;
+      res = new AST.Mult(res, e);
     }
   | "/" e = facteur()
     {
-      res = res * e;
+      res = new AST.Mult(res, e);
     }
   )*
   {
@@ -138,9 +139,9 @@ float terme() :
   }
 }
 
-float facteur() :
+AST.ExpressionA facteur() :
 {
-  float e;
+  AST.ExpressionA e;
   Token t;
 }
 {
@@ -157,12 +158,11 @@ float facteur() :
     e = facteur()
   )
   {
-    return (- e);
+    return  new AST.Neg(e);
   }
 | t = < NOMBRE >
   {
-   // return Integer.parseInt(t.image);
-   return Float.parseFloat(t.image);
+    return new AST.Num(Integer.parseInt(t.image));
   }
 }
 
