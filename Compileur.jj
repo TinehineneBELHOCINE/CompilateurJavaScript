@@ -19,7 +19,7 @@ public class Compileur
         Compileur parseur = new Compileur(System.in);
         //mainNoTerminaux
         ast = parseur.mainNT();
-        System.out.println(ast.toString());
+        System.out.println(ast.toAssembly());
         System.out.println("C'est bien une expression arithmetique");
       }
       catch (TokenMgrError e)
@@ -36,11 +36,29 @@ public class Compileur
       try
       {
         InputStream ips = new FileInputStream(args [0]);
+        String monFichier = args [0];
         InputStreamReader ipsr = new InputStreamReader(ips);
         BufferedReader br = new BufferedReader(ipsr);
+        
         Compileur parseur = new Compileur(br);
+  
         ast = parseur.mainNT();
-        System.out.println(ast.toString());
+        String nouveauFile = monFichier.substring(0, (monFichier.length() - 3));
+        System.out.println("mon fichier est: " + nouveauFile);
+        String nouveauFileJSM = nouveauFile + "jsm";
+        File fileM = new File(nouveauFileJSM);
+        if (fileM.createNewFile())
+        {
+          System.out.println("fichier crée");
+        }
+        else
+        {
+          System.out.println("Code généré dans le fichier ");
+        }
+        FileWriter fileWriter = new FileWriter(fileM);
+        fileWriter.write(ast.toAssembly());
+        fileWriter.close();
+        System.out.println(ast.toAssembly());
         System.out.println("C'est bien une expression arithmetique");
       }
       catch (TokenMgrError e)
@@ -50,7 +68,9 @@ public class Compileur
       catch (ParseException e)
       {
         System.out.println("Ceci n'est pas une expression arithmetique");
-      }
+      }catch (Throwable e) {
+            System.out.println(e.getMessage());
+        }
     }
   }
 }
