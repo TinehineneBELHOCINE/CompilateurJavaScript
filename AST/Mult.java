@@ -7,7 +7,7 @@ public class Mult extends ExpressionA_Binaire {
 	}
 
 	public String symbole() {
-		return "fois";
+		return "MultNb";
 	};
 
 }

@@ -14,6 +14,6 @@ abstract class ExpressionA_Binaire extends ExpressionA {
   abstract String symbole(); 
 
   public String toString() {
-    return String.format("%1$s(%2$s,%3$s)", symbole(), gauche.toString(), droite.toString());
+    return String.format("%2$s\n%3$s\n%1$s\nHalt", symbole(), gauche.toString(), droite.toString());
   }
 }

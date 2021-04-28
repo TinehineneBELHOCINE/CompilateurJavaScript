@@ -7,7 +7,7 @@ public class Div extends ExpressionA_Binaire {
 	}
 
 	public String symbole() {
-		return "division";
+		return "DivNb";
 	};
 
 }

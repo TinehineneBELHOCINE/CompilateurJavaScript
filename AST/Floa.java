@@ -8,7 +8,7 @@ public class Floa extends ExpressionA {
   }
   
   public String toString() {
-    return Float.toString(floa);
+    return "CsteNb "+floa;
   }
 
 }

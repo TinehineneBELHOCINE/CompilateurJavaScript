@@ -8,7 +8,7 @@ public class Num extends ExpressionA {
   }
   
   public String toString() {
-    return Integer.toString(num);
+    return "CsteNb "+num;
   }
 
 }

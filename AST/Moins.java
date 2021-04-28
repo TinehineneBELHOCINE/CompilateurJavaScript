@@ -7,7 +7,7 @@ public class Moins extends ExpressionA_Binaire {
 	}
 
 	public String symbole() {
-		return "moins";
+		return "SubiNb";
 	};
 
 }

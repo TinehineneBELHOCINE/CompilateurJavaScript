@@ -7,7 +7,7 @@ public class Plus extends ExpressionA_Binaire {
 	}
 
 	public String symbole() {
-		return "plus";
+		return "AddiNb";
 	};
 
 }
