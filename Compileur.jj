@@ -44,12 +44,12 @@ public class Compileur
         InputStreamReader ipsr = new InputStreamReader(ips);
         BufferedReader br = new BufferedReader(ipsr);
         String ligne;
+        String nouveauFile = monFichier.substring(0, (monFichier.length() - 3));
+        String nouveauFileJSM = nouveauFile + "jsm";
         while ((ligne = br.readLine()) != null)
         {
           Compileur parseur = new Compileur(new StringReader(ligne));
           ast = parseur.mainNT();
-          String nouveauFile = monFichier.substring(0, (monFichier.length() - 3));
-          String nouveauFileJSM = nouveauFile + "jsm";
           File fileM = new File(nouveauFileJSM);
           if (fileM.createNewFile())
           {
@@ -59,11 +59,14 @@ public class Compileur
           {
             System.out.println("Le code a ete genere dans le fichier ");
           }
-          FileWriter fileWriter = new FileWriter(fileM);
+          FileWriter fileWriter = new FileWriter(fileM, true);
           fileWriter.write(ast.toAssembly());
+          fileWriter.write("\nHalt\n");
           fileWriter.close();
           System.out.println(ast.toAssembly());
+           System.out.println("Halt");
           System.out.println("C'est bien une expression arithmetique");
+          
         }
       }
       catch (TokenMgrError e)
@@ -199,4 +202,8 @@ AST.ExpressionA facteur() :
     return new AST.Boole(Boolean.parseBoolean(t.image));
   }
 }
+
+
+
+
 
