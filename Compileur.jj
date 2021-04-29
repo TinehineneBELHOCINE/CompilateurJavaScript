@@ -1,7 +1,11 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
  */
-
+//on appelle plusieurs fois le constructeur donc we set the JavaCC option STATIC to false during parser generation.
+options
+{
+  STATIC = false;
+}
 
 PARSER_BEGIN(Compileur)
 import java.io.InputStream;
@@ -39,26 +43,28 @@ public class Compileur
         String monFichier = args [0];
         InputStreamReader ipsr = new InputStreamReader(ips);
         BufferedReader br = new BufferedReader(ipsr);
-        
-        Compileur parseur = new Compileur(br);
-  
-        ast = parseur.mainNT();
-        String nouveauFile = monFichier.substring(0, (monFichier.length() - 3));
-        String nouveauFileJSM = nouveauFile + "jsm";
-        File fileM = new File(nouveauFileJSM);
-        if (fileM.createNewFile())
+        String ligne;
+        while ((ligne = br.readLine()) != null)
         {
-          System.out.println("Le fichier a ete cree");
+          Compileur parseur = new Compileur(new StringReader(ligne));
+          ast = parseur.mainNT();
+          String nouveauFile = monFichier.substring(0, (monFichier.length() - 3));
+          String nouveauFileJSM = nouveauFile + "jsm";
+          File fileM = new File(nouveauFileJSM);
+          if (fileM.createNewFile())
+          {
+            System.out.println("Le fichier a ete cree");
+          }
+          else
+          {
+            System.out.println("Le code a ete genere dans le fichier ");
+          }
+          FileWriter fileWriter = new FileWriter(fileM);
+          fileWriter.write(ast.toAssembly());
+          fileWriter.close();
+          System.out.println(ast.toAssembly());
+          System.out.println("C'est bien une expression arithmetique");
         }
-        else
-        {
-          System.out.println("Le code a ete genere dans le fichier ");
-        }
-        FileWriter fileWriter = new FileWriter(fileM);
-        fileWriter.write(ast.toAssembly());
-        fileWriter.close();
-        System.out.println(ast.toAssembly());
-        System.out.println("C'est bien une expression arithmetique");
       }
       catch (TokenMgrError e)
       {
@@ -67,9 +73,11 @@ public class Compileur
       catch (ParseException e)
       {
         System.out.println("Ceci n'est pas une expression arithmetique");
-      }catch (Throwable e) {
-            System.out.println(e.getMessage());
-        }
+      }
+      catch (Throwable e)
+      {
+        System.out.println(e.getMessage());
+      }
     }
   }
 }
@@ -87,7 +95,9 @@ TOKEN :
 {
   < NOMBRE : [ "1"-"9" ] ([ "0"-"9" ])* >
 | < FLOAT : [ "1"-"9" ] ([ "0"-"9" ])* (".")? ([ "0"-"9" ])* >
-| < BOOLEAN : "True"|"False" >
+| < BOOLEAN :
+    "True"
+  | "False" >
 | < EOL : ";" >
 }
 
@@ -184,12 +194,9 @@ AST.ExpressionA facteur() :
   {
     return new AST.Floa(Float.parseFloat(t.image));
   }
-  | t = < BOOLEAN >
+| t = < BOOLEAN >
   {
     return new AST.Boole(Boolean.parseBoolean(t.image));
   }
 }
-
-
-
 
