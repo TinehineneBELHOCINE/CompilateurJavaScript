@@ -64,9 +64,8 @@ public class Compileur
           fileWriter.write("\nHalt\n");
           fileWriter.close();
           System.out.println(ast.toAssembly());
-           System.out.println("Halt");
+          System.out.println("Halt");
           System.out.println("C'est bien une expression arithmetique");
-          
         }
       }
       catch (TokenMgrError e)
@@ -107,6 +106,7 @@ TOKEN :
 AST.ExpressionA mainNT() :
 {
   AST.ExpressionA e;
+  System.out.println("Dans le main");
 }
 {
   (
@@ -115,10 +115,54 @@ AST.ExpressionA mainNT() :
   ";"
   {
     return e;
+    System.out.println("Dans le main, appel expression");
   }
 }
 
+/*************************************/
 AST.ExpressionA expression() :
+{
+  AST.ExpressionA res;
+  AST.ExpressionA e;
+}
+{
+  e = expressionSecondaire()
+  {
+    res = e;
+  }
+  (
+    "==" e = expressionSecondaire()
+    {
+      res = new AST.Equal(res, e);
+    }
+  | ">=" e = expressionSecondaire()
+    {
+      res = new AST.SupEgal(res, e);
+    }
+  | ">" e = expressionSecondaire()
+    {
+      res = new AST.Sup(res, e);
+    }
+  | "!=" e = expressionSecondaire()
+    {
+      res = new AST.NotEqual(res, e);
+    }
+  | "< =" e = expressionSecondaire()
+    {
+      res = new AST.InfEgal(res, e);
+    }
+  | "<" e = expressionSecondaire()
+    {
+      res = new AST.Inf(res, e);
+    }
+  )*
+  {
+    return res;
+  }
+}
+
+/********************************************************************************/
+AST.ExpressionA expressionSecondaire() :
 {
   AST.ExpressionA res;
   AST.ExpressionA e;
@@ -189,6 +233,13 @@ AST.ExpressionA facteur() :
   {
     return new AST.Neg(e);
   }
+| "!"
+  (
+    e = facteur()
+  )
+  {
+    return new AST.NOT(e);
+  }
 | t = < NOMBRE >
   {
     return new AST.Num(Integer.parseInt(t.image));
@@ -202,7 +253,6 @@ AST.ExpressionA facteur() :
     return new AST.Boole(Boolean.parseBoolean(t.image));
   }
 }
-
 
 
 
