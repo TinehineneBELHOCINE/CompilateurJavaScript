@@ -99,6 +99,23 @@ TOKEN :
 {
   < NOMBRE : [ "1"-"9" ] ([ "0"-"9" ])* >
 | < FLOAT : [ "1"-"9" ] ([ "0"-"9" ])* (".")? ([ "0"-"9" ])* >
+| < FLOATING :
+    (
+      [ "1"-"9" ] ([ "0"-"9" ])* ("e")? ("e-")?
+      (
+        [ "0"-"9" ] ([ "0"-"9" ])*
+      )?
+    )*
+    "."
+    (
+      [ "0"-"9" ] ([ "0"-"9" ])*
+    )?
+    ("e")? ("e-")? ([ "0"-"9" ])*
+  | 
+    [ "1"-"9" ] ([ "0"-"9" ])* ("e")? ("e-")?
+    (
+      [ "0"-"9" ] ([ "0"-"9" ])*
+    )? >
 | < BOOLEAN :
     "True"
   | "False" >
@@ -273,7 +290,11 @@ AST.ExpressionA facteur() :
   {
     return new AST.Var(t.image);
   }
-
+| 
+  t = < FLOATING >
+  {
+    return new AST.FloatNan(Float.parseFloat(t.image));
+  }
 }
 
 AST.ExpressionA comment() :
@@ -291,9 +312,5 @@ AST.ExpressionA comment() :
     return new AST.R();
   }
 }
-
-
-
-
 
 
