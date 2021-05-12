@@ -133,7 +133,33 @@ TOKEN :
 AST.ExpressionA mainNT() :
 {
   AST.ExpressionA e;
-  String k;
+}
+{
+  (
+    e = programme()
+  )
+  {
+    return e;
+  }
+}
+
+/*************************************/
+
+AST.ExpressionA programme() :
+{
+  AST.ExpressionA e;
+}
+{
+  e = commande()
+  {
+    return e;
+  }
+}
+
+AST.ExpressionA commande() :
+{
+  AST.ExpressionA res;
+  AST.ExpressionA e;
 }
 {
   (
@@ -146,13 +172,12 @@ AST.ExpressionA mainNT() :
   (
     e = expression()
   )
-  ";"
+  < EOL >
   {
     return e;
   }
 }
 
-/*************************************/
 AST.ExpressionA expression() :
 {
   AST.ExpressionA res;
