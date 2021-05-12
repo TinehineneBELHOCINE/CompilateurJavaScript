@@ -15,7 +15,8 @@ public class Compileur
 {
   public static void main(String args []) throws FileNotFoundException, ParseException
   {
-    AST.AST ast;
+    //AST.AST ast;
+    AST.commande_ast ast;
     if (args.length == 0)
     {
       try
@@ -337,5 +338,4 @@ AST.ExpressionA comment() :
     return new AST.R();
   }
 }
-
 

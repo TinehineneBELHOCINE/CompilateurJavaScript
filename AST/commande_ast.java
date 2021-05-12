@@ -1,9 +1,8 @@
 package AST;
 
-public abstract class ExpressionA extends commande_ast {
+public class commande_ast extends AST {
 	public String toAssembly() {
-		
+
 		return toString();
 	};
-
 }
